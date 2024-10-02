@@ -1,0 +1,26 @@
+body{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(45, 156, 247);
+}
+.Titre h1{
+    
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    border-color: black;
+    text-align: center;
+    font-size: 500%;
+}
+
+input[type=number] {
+    background-color: white;
+    border-radius: 3%;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    border-radius: 50;
+  }
+
+ 
