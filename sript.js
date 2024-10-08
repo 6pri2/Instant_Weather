@@ -1,6 +1,7 @@
 let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
 
+// Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
     const codePostal = this.value;
 
@@ -12,6 +13,7 @@ cp.addEventListener('input', function() {
     }
 });
 
+// Fonction pour rechercher la commune par code postal
 function rechercherCommune(codePostal) {
     fetch(`https://geo.api.gouv.fr/communes?codePostal=${codePostal}`)
         .then(response => {
@@ -23,6 +25,13 @@ function rechercherCommune(codePostal) {
         .then(data => {
             select.innerHTML = ''; // Réinitialise le contenu du select
 
+            // Ajoute une option par défaut
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = 'Choisir une commune';
+            defaultOption.disabled = true; // Désactive l'option
+            defaultOption.selected = true; // Sélectionne par défaut
+            select.appendChild(defaultOption);
+
             // Remplit le select avec les résultats
             data.forEach(commune => {
                 const option = document.createElement('option');
@@ -33,15 +42,24 @@ function rechercherCommune(codePostal) {
 
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
-                const communeSelectionnee = select.value;
-                afficherMeteo(communeSelectionnee);
+                // Vérifie si une option valide est sélectionnée
+                if (select.value !== defaultOption.textContent) {
+                    afficherMeteo(select.value);
+                }
             });
+
+            // Si un seul choix est disponible, sélectionnez-le automatiquement
+            if (data.length === 1) {
+                select.value = data[0].code; // Sélectionne automatiquement la seule option
+                afficherMeteo(data[0].code); // Appelle la fonction météo immédiatement
+            }
         })
         .catch(error => {
             console.error('Erreur:', error);
         });
 }
 
+// Fonction pour afficher la météo pour la commune sélectionnée
 function afficherMeteo(insee) {
     fetch(`https://api.meteo-concept.com/api/forecast/daily/0?token=4bba169b3e3365061d39563419ab23e5016c0f838ba282498439c41a00ef1091&insee=${insee}`)
         .then(response => {
