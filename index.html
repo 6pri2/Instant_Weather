@@ -11,13 +11,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <div class="Titre">
-        <h1>Instant Weather</h1>
-    </div>
-    <div class="Formulaire">
-        <form>
-            <input type="text" name="search" placeholder="Entrez un code postal">
-        </form>
-    </div>
+    <h1>Instant Weather</h1>
+    <label for="codePostal">Code Postal</label>
+    <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
+    <select id="commune"></select>
+    <div id="meteoDisplay"></div>
+
+    <!-- Scripts JavaScript -->
+    <script src="sript.js"></script>
+
 </body>
 </html>
