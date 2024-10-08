@@ -1,0 +1,49 @@
+body{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #0182A6;
+}
+
+.pacifico-regular {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    border-color: black;
+    text-align: center;
+    font-size: 600%;
+    
+  }
+
+
+input[type=text] {
+    width: 30%;
+    transition: width 0.4s ease-in-out;
+    border-radius: 50px;
+    margin: 1%;
+    padding: 1%;
+    margin-top: 7%;
+    margin-bottom: 2%;
+  }
+  input[type=text]:focus {
+    width: 30%;
+  }
+  select {
+    width: 30%;
+    padding: 1%;
+    margin: 1%;
+    border: none;
+    border-radius: 30px;
+    background-color: #f1f1f1;
+    margin-bottom: 5%;
+  }
+  #meteoDisplay{
+    
+    padding: 10%;
+    border-radius: 15px;
+    color: white;
+    font-size: 120%;
+    background-color: #8ED4FF;
+  }
+ 

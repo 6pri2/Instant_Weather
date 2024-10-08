@@ -1,5 +1,9 @@
 let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
+let meteo = document.getElementById('meteoDisplay');
+
+select.style.display = 'none';
+meteo.style.display = 'none';
 
 // Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
@@ -9,7 +13,8 @@ cp.addEventListener('input', function() {
         rechercherCommune(codePostal);
     } else {
         select.innerHTML = ''; // Réinitialise le select
-        document.getElementById('meteoDisplay').innerHTML = ''; // Réinitialise l'affichage météo
+        select.style.display = 'none'; // Cache le select
+        meteo.innerHTML = ''; // Réinitialise l'affichage météo
     }
 });
 
@@ -40,6 +45,13 @@ function rechercherCommune(codePostal) {
                 select.appendChild(option);
             });
 
+            // Affiche le select s'il y a des résultats
+            if (data.length > 0) {
+                select.style.display = 'block'; // Affiche le select
+            } else {
+                select.style.display = 'none'; // Cache le select s'il n'y a pas de résultats
+            }
+
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
                 // Vérifie si une option valide est sélectionnée
@@ -56,6 +68,7 @@ function rechercherCommune(codePostal) {
         })
         .catch(error => {
             console.error('Erreur:', error);
+            select.style.display = 'none'; // Cache le select en cas d'erreur
         });
 }
 
@@ -75,9 +88,11 @@ function afficherMeteo(insee) {
                     Probabilité de Pluie : ${forecast.probarain}%<br>
                     Heures d'Ensoleillement : ${forecast.sun_hours}h
                 `;
-                document.getElementById('meteoDisplay').innerHTML = meteoInfo;
+                meteo.innerHTML = meteoInfo;
+                meteo.style.display="contents";
             } else {
-                document.getElementById('meteoDisplay').innerHTML = 'Aucune donnée météo disponible.';
+                meteo.innerHTML = 'Aucune donnée météo disponible.';
+                meteo.style.display="none";
             }
         })
         .catch(error => console.error('Erreur:', error));
