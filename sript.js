@@ -25,6 +25,13 @@ function rechercherCommune(codePostal) {
         .then(data => {
             select.innerHTML = ''; // Réinitialise le contenu du select
 
+            // Ajoute une option par défaut
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = 'Choisir une commune';
+            defaultOption.disabled = true; // Désactive l'option
+            defaultOption.selected = true; // Sélectionne par défaut
+            select.appendChild(defaultOption);
+
             // Remplit le select avec les résultats
             data.forEach(commune => {
                 const option = document.createElement('option');
@@ -35,7 +42,10 @@ function rechercherCommune(codePostal) {
 
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
-                afficherMeteo(select.value);
+                // Vérifie si une option valide est sélectionnée
+                if (select.value !== defaultOption.textContent) {
+                    afficherMeteo(select.value);
+                }
             });
 
             // Si un seul choix est disponible, sélectionnez-le automatiquement
