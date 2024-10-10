@@ -10,15 +10,32 @@
     <title>Instant Weather</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1 class="pacifico-regular">Instant Weather</h1>
-    <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
-    <select id="commune"></select>
-    <div id="meteoDisplay" ></div>
+<body class="flex">
+
+    <div class="flex-grow">
+        <h1 class="pacifico-regular">Instant Weather</h1>
+        <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
+        <select id="commune"></select>
+        <div id="meteoDisplay"></div>
+    </div>
+
+    <div class="w-1/4 p-4 border border-gray-300 rounded ml-4">
+        <h2 class="font-bold">Options Météo</h2>
+        <form>
+            <label><input type="checkbox" checked> Température minimum</label><br>
+            <label><input type="checkbox" checked> Température maximale</label><br>
+            <label><input type="checkbox" checked> Probabilité de pluie</label><br>
+            <label><input type="checkbox" checked> Nombre d'heures d'ensoleillement</label><br>
+            <label><input type="checkbox"> Latitude décimale de la commune</label><br>
+            <label><input type="checkbox"> Longitude décimale de la commune</label><br>
+            <label><input type="checkbox"> Cumul de pluie sur la journée en mm</label><br>
+            <label><input type="checkbox"> Vent moyen à 10 mètres en km/h</label><br>
+            <label><input type="checkbox"> Direction du vent en degrés</label><br>
+        </form>
+    </div>
 
     <!-- Scripts JavaScript -->
     <script src="sript.js"></script>
 
 </body>
-
 </html>

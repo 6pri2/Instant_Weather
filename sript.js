@@ -1,6 +1,7 @@
 let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
 let meteo = document.getElementById('meteoDisplay');
+let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
 select.style.display = 'none';
 meteo.style.display = 'none';
@@ -40,30 +41,25 @@ function rechercherCommune(codePostal) {
             // Remplit le select avec les résultats
             data.forEach(commune => {
                 const option = document.createElement('option');
-                option.value = commune.code; // Utilisez le code INSEE
+                option.value = commune.code; // Utilise le code INSEE
                 option.textContent = commune.nom;
                 select.appendChild(option);
             });
 
             // Affiche le select s'il y a des résultats
-            if (data.length > 0) {
-                select.style.display = 'block'; // Affiche le select
-            } else {
-                select.style.display = 'none'; // Cache le select s'il n'y a pas de résultats
-            }
+            select.style.display = data.length > 0 ? 'block' : 'none';
 
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
-                // Vérifie si une option valide est sélectionnée
                 if (select.value !== defaultOption.textContent) {
-                    afficherMeteo(select.value);
+                    afficherMeteo(select.value, data); // Passe les données pour obtenir les coordonnées
                 }
             });
 
             // Si un seul choix est disponible, sélectionnez-le automatiquement
             if (data.length === 1) {
                 select.value = data[0].code; // Sélectionne automatiquement la seule option
-                afficherMeteo(data[0].code); // Appelle la fonction météo immédiatement
+                afficherMeteo(data[0].code, data); // Appelle la fonction météo immédiatement
             }
         })
         .catch(error => {
@@ -73,7 +69,10 @@ function rechercherCommune(codePostal) {
 }
 
 // Fonction pour afficher la météo pour la commune sélectionnée
-function afficherMeteo(insee) {
+function afficherMeteo(insee, communes) {
+    const commune = communes.find(commune => commune.code === insee); // Trouve la commune
+    if (!commune) return;
+
     fetch(`https://api.meteo-concept.com/api/forecast/daily/0?token=4bba169b3e3365061d39563419ab23e5016c0f838ba282498439c41a00ef1091&insee=${insee}`)
         .then(response => {
             if (!response.ok) throw new Error('Erreur réseau');
@@ -81,18 +80,51 @@ function afficherMeteo(insee) {
         })
         .then(data => {
             const forecast = data.forecast;
+            const city = data.city; // Récupère les données de la ville
+
             if (forecast) {
-                const meteoInfo = `
-                    Température Min : ${forecast.tmin}°C<br>
-                    Température Max : ${forecast.tmax}°C<br>
-                    Probabilité de Pluie : ${forecast.probarain}%<br>
-                    Heures d'Ensoleillement : ${forecast.sun_hours}h
-                `;
-                meteo.innerHTML = meteoInfo;
-                meteo.style.display="contents";
+                let meteoInfo = '';
+
+                // Récupérer les informations basées sur les cases à cocher
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        switch (checkbox.nextSibling.textContent.trim()) {
+                            case 'Température minimum':
+                                meteoInfo += `Température Min : ${forecast.tmin}°C<br>`;
+                                break;
+                            case 'Température maximale':
+                                meteoInfo += `Température Max : ${forecast.tmax}°C<br>`;
+                                break;
+                            case 'Probabilité de pluie':
+                                meteoInfo += `Probabilité de Pluie : ${forecast.probarain}%<br>`;
+                                break;
+                            case 'Nombre d\'heures d\'ensoleillement':
+                                meteoInfo += `Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
+                                break;
+                            case 'Latitude décimale de la commune':
+                                meteoInfo += `Latitude décimale de la commune : ${city.latitude}°<br>`;
+                                break;
+                            case 'Longitude décimale de la commune':
+                                meteoInfo += `Longitude décimale de la commune : ${city.longitude}°<br>`;
+                                break;
+                            case 'Cumul de pluie sur la journée en mm':
+                                meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
+                                break;
+                            case 'Vent moyen à 10 mètres en km/h':
+                                meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
+                                break;
+                            case 'Direction du vent en degrés':
+                                meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
+                                break;
+                        }
+                    }
+                });
+
+                meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
+                meteo.style.display = "block"; // Affiche les informations météo
             } else {
                 meteo.innerHTML = 'Aucune donnée météo disponible.';
-                meteo.style.display="none";
+                meteo.style.display = "none";
             }
         })
         .catch(error => console.error('Erreur:', error));
