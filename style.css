@@ -1,8 +1,24 @@
-body{
+body {
     display: flex;
-    align-items: center;
-    flex-direction: column;
+    justify-content: center; /* Centre horizontalement */
     background-color: #0182A6;
+}
+
+.container {
+    display: flex; /* Flexbox pour le contenu principal et le menu */
+}
+
+.main-content {
+    flex: 1; /* Prend l'espace restant */
+    padding: 20px; /* Ajoute un peu de padding */
+}
+
+.menu {
+    width: 250px; /* Largeur fixe pour le menu */
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 15px;
+    margin-left: 20px; /* Espace entre le contenu principal et le menu */
 }
 
 .pacifico-regular {
@@ -13,37 +29,29 @@ body{
     border-color: black;
     text-align: center;
     font-size: 600%;
-    
-  }
-
+}
 
 input[type=text] {
-    width: 30%;
+    width: 100%;
     transition: width 0.4s ease-in-out;
     border-radius: 50px;
     margin: 1%;
     padding: 1%;
-    margin-top: 7%;
-    margin-bottom: 2%;
-  }
-  input[type=text]:focus {
-    width: 30%;
-  }
-  select {
-    width: 30%;
+}
+
+select {
+    width: 100%;
     padding: 1%;
     margin: 1%;
     border: none;
     border-radius: 30px;
     background-color: #f1f1f1;
-    margin-bottom: 5%;
-  }
-  #meteoDisplay{
-    
+}
+
+#meteoDisplay {
     padding: 10%;
     border-radius: 15px;
     color: white;
     font-size: 120%;
     background-color: #8ED4FF;
-  }
- 
+}
