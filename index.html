@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <title>Instant Weather</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<title>Instant Weather</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://kit.fontawesome.com/05e08229e8.js" crossorigin="anonymous"></script>
 </head>
 <body class="flex">
 
     <div class="flex-grow">
         <h1 class="pacifico-regular">Instant Weather</h1>
+        <div class="recherche">
         <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
+        <button id="openModalBtn"  class="fa-solid fa-filter fa-3x"></button>
+        </div>
+        <div class="affichage">
         <select id="commune"></select>
         <div id="meteoDisplay"></div>
+        </div>
     </div>
+    
 
-    <div class="w-1/4 p-4 border border-gray-300 rounded ml-4">
-        <h2 class="font-bold">Options Météo</h2>
+
+
+<!-- Modal Structure -->
+<div id="optionsModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+        <h2 class="font-bold mb-4">Options Météo</h2>
         <form>
             <label><input type="checkbox" checked> Température minimum</label><br>
             <label><input type="checkbox" checked> Température maximale</label><br>
@@ -32,10 +43,12 @@
             <label><input type="checkbox"> Vent moyen à 10 mètres en km/h</label><br>
             <label><input type="checkbox"> Direction du vent en degrés</label><br>
         </form>
+        <button id="closeModalBtn" class="mt-4 bg-red-500 text-white p-2 rounded">Fermer</button>
     </div>
+</div>
 
-    <!-- Scripts JavaScript -->
-    <script src="sript.js"></script>
+<!-- Scripts JavaScript -->
+<script src="sript.js"></script>
 
 </body>
 </html>

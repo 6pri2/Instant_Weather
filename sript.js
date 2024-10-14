@@ -2,6 +2,8 @@ let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
 let meteo = document.getElementById('meteoDisplay');
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+let imgmeteo = document.createElement('img');
+
 
 select.style.display = 'none';
 meteo.style.display = 'none';
@@ -117,11 +119,27 @@ function afficherMeteo(insee, communes) {
                                 meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
                                 break;
                         }
+                        
                     }
                 });
-
+                meteoInfo += `${forecast.weather}`
                 meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
-                meteo.style.display = "block"; // Affiche les informations météo
+                let test = 'un';
+                switch (forecast.weather){
+                    case forecast.weather== 0 :
+                        imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
+                        
+                        break;
+                    case forecast.weather>=1 && forecast.weather<=5 :
+                        imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                        meteo.innerHTML += test;
+                        break;
+                    default:
+                        imgmeteo.src='https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                }
+                
+                meteo.appendChild(imgmeteo);
+                meteo.style.display = "flex"; // Affiche les informations météo
             } else {
                 meteo.innerHTML = 'Aucune donnée météo disponible.';
                 meteo.style.display = "none";
@@ -129,3 +147,25 @@ function afficherMeteo(insee, communes) {
         })
         .catch(error => console.error('Erreur:', error));
 }
+
+// Get elements
+let openModalBtn = document.getElementById('openModalBtn');
+let closeModalBtn = document.getElementById('closeModalBtn');
+let optionsModal = document.getElementById('optionsModal');
+
+// Open modal when clicking the button
+openModalBtn.addEventListener('click', function() {
+    optionsModal.classList.add('active');
+});
+
+// Close modal when clicking the close button
+closeModalBtn.addEventListener('click', function() {
+    optionsModal.classList.remove('active');
+});
+
+// Optionally close the modal when clicking outside of the modal content
+window.addEventListener('click', function(event) {
+    if (event.target === optionsModal) {
+        optionsModal.classList.remove('active');
+    }
+});
