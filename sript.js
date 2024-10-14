@@ -129,3 +129,25 @@ function afficherMeteo(insee, communes) {
         })
         .catch(error => console.error('Erreur:', error));
 }
+
+// Get elements
+let openModalBtn = document.getElementById('openModalBtn');
+let closeModalBtn = document.getElementById('closeModalBtn');
+let optionsModal = document.getElementById('optionsModal');
+
+// Open modal when clicking the button
+openModalBtn.addEventListener('click', function() {
+    optionsModal.classList.add('active');
+});
+
+// Close modal when clicking the close button
+closeModalBtn.addEventListener('click', function() {
+    optionsModal.classList.remove('active');
+});
+
+// Optionally close the modal when clicking outside of the modal content
+window.addEventListener('click', function(event) {
+    if (event.target === optionsModal) {
+        optionsModal.classList.remove('active');
+    }
+});
