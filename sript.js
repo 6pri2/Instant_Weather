@@ -2,9 +2,13 @@ let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
 let meteo = document.getElementById('meteoDisplay');
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+let jourRange = document.getElementById('jourRange');
+let jourValue = document.getElementById('jourValue');
+let scalerContainer = document.getElementById('scalerContainer'); // Le scaler de 1 à 7 jours
 
 select.style.display = 'none';
 meteo.style.display = 'none';
+scalerContainer.style.display = 'none'; // Masquer le scaler par défaut
 
 // Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
@@ -16,6 +20,7 @@ cp.addEventListener('input', function() {
         select.innerHTML = ''; // Réinitialise le select
         select.style.display = 'none'; // Cache le select
         meteo.innerHTML = ''; // Réinitialise l'affichage météo
+        scalerContainer.style.display = 'none'; // Cache le scaler si le code postal est invalide
     }
 });
 
@@ -34,8 +39,8 @@ function rechercherCommune(codePostal) {
             // Ajoute une option par défaut
             const defaultOption = document.createElement('option');
             defaultOption.textContent = 'Choisir une commune';
-            defaultOption.disabled = true; // Désactive l'option
-            defaultOption.selected = true; // Sélectionne par défaut
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
             select.appendChild(defaultOption);
 
             // Remplit le select avec les résultats
@@ -48,6 +53,7 @@ function rechercherCommune(codePostal) {
 
             // Affiche le select s'il y a des résultats
             select.style.display = data.length > 0 ? 'block' : 'none';
+            scalerContainer.style.display = data.length > 0 ? 'block' : 'none'; // Affiche le scaler si des communes sont trouvées
 
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
@@ -65,8 +71,14 @@ function rechercherCommune(codePostal) {
         .catch(error => {
             console.error('Erreur:', error);
             select.style.display = 'none'; // Cache le select en cas d'erreur
+            scalerContainer.style.display = 'none'; // Cache le scaler en cas d'erreur
         });
 }
+
+// Affiche la valeur du scaler (nombre de jours) dynamiquement
+jourRange.addEventListener('input', function() {
+    jourValue.textContent = this.value;
+});
 
 // Fonction pour afficher la météo pour la commune sélectionnée
 function afficherMeteo(insee, communes) {
