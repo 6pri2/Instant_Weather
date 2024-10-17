@@ -122,22 +122,30 @@ function afficherMeteo(insee, communes) {
                         
                     }
                 });
-                meteoInfo += `${forecast.weather}`
-                meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
-                let test = 'un';
-                switch (forecast.weather){
-                    case forecast.weather== 0 :
-                        imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
-                        
-                        break;
-                    case forecast.weather>=1 && forecast.weather<=5 :
-                        imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
-                        meteo.innerHTML += test;
-                        break;
-                    default:
-                        imgmeteo.src='https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                let icone = forecast.weather
+                if (icone === 0){
+                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
+                }
+                else if (icone>=1 && icone <=8){
+                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                }
+                else if ((icone>=10 && icone <=16)||(icone>=40 && icone <=48)||(icone>=210 && icone <=212)){
+                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-6.svg';
+                }
+                else if ((icone>=20 && icone <=32)||(icone>=60 && icone <=78)||(icone>=220 && icone <=232)){
+                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg';
+                }
+                else if (icone>=100 && icone <=142){
+                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/thunder.svg';
+                }
+                else if (icone ===235){ 
+                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg';
+                }
+                else {
+                    imgmeteo.src='https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
                 }
                 
+                meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
                 meteo.appendChild(imgmeteo);
                 meteo.style.display = "flex"; // Affiche les informations météo
             } else {
