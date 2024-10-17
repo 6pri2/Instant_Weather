@@ -1,4 +1,4 @@
-#🌦️ Instant Weather
+# 🌦️ INSTANT WEATHER
 
 🌍 Description du projet
 Instant Weather est une application Web interactive permettant à l'utilisateur d'afficher les informations météorologiques de la commune de son choix en saisissant un code postal. 
