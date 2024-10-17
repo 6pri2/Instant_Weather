@@ -54,4 +54,47 @@ select {
     color: white;
     font-size: 120%;
     background-color: #8ED4FF;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal .modal-content {
+    background-color: white;
+    padding: 1%;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    max-width: 90vw; /* Limiter la largeur à 90% de la vue */
+    padding: 2rem;
+}
+
+.modal.active {
+    display: flex; /* Show the modal when active */
+}
+.recherche{
+    display: flex;
+    margin: 2%;
+}
+.affichage{
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+}
+#commune{
+   width: 90%;
+}
+
