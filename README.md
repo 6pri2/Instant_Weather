@@ -26,7 +26,7 @@
   - Température maximale 🔥
   - Probabilité de pluie 🌧️
   - Nombre d'heures d'ensoleillement ☀️
-- ⚠️ **Attention** : Responsive et conforme aux standards HTML/CSS (W3C) et aux normes d'accessibilité WCAG AA 2.0
+⚠️ **Attention** Le site doit être responsive et conforme aux standards HTML/CSS (W3C) et aux normes d'accessibilité WCAG AA 2.0
 
 ### VERSION 2 (AVANCÉE)
 - Sélection du nombre de jours de prévisions (1 à 7 jours)
@@ -45,3 +45,7 @@
 1. Clonez le repository :
    ```bash
    git clone https://github.com/ton-repository/instant-weather.git
+
+## 📖 AUTEURS
+
+Projet réalisé par **Cyprien Duroy, Alexandre Leroy et Lyes Guernine**
