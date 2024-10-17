@@ -22,6 +22,7 @@ cp.addEventListener('input', function() {
     } else {
         select.innerHTML = ''; // Réinitialise le select
         select.style.display = 'none'; // Cache le select
+        meteo.style.display= 'none'
         meteo.innerHTML = ''; // Réinitialise l'affichage météo
         scalerContainer.style.display = 'none'; // Cache le scaler si le code postal est invalide
     }
@@ -82,6 +83,12 @@ function rechercherCommune(codePostal) {
 // Affiche la valeur du scaler (nombre de jours) dynamiquement
 jourRange.addEventListener('input', function() {
     jourValue.textContent = this.value;
+
+    // Relance la fonction afficherMeteo avec la commune sélectionnée
+    const selectedCommune = select.value;
+    if (selectedCommune) {
+        afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
+    }
 });
 
 // Fonction pour afficher la météo pour la commune sélectionnée
@@ -89,73 +96,92 @@ function afficherMeteo(insee, communes) {
     const commune = communes.find(commune => commune.code === insee); // Trouve la commune
     if (!commune) return;
 
-    fetch(`https://api.meteo-concept.com/api/forecast/daily/0?token=4bba169b3e3365061d39563419ab23e5016c0f838ba282498439c41a00ef1091&insee=${insee}`)
-        .then(response => {
-            if (!response.ok) throw new Error('Erreur réseau');
-            return response.json();
-        })
-        .then(data => {
-            const forecast = data.forecast;
-            const city = data.city; // Récupère les données de la ville
+    const nombreDeJours = parseInt(jourValue.textContent, 10); // Récupère le nombre de jours sélectionné
+    let meteoPromises = [];
 
-            if (forecast) {
-                const date = new Date(forecast.datetime); // Récupérer la date
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const formattedDate = date.toLocaleDateString('fr-FR', options);
-                const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
+    // Boucle pour chaque jour
+    for (let i = 0; i < nombreDeJours; i++) {
+        meteoPromises.push(
+            fetch(`https://api.meteo-concept.com/api/forecast/daily/${i}?token=4bba169b3e3365061d39563419ab23e5016c0f838ba282498439c41a00ef1091&insee=${insee}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Erreur réseau');
+                    return response.json();
+                })
+                .then(data => {
+                    const forecast = data.forecast;
+                    let meteoInfo = '';
 
-                let meteoInfo = `<strong>${capitalizedDate}</strong><br>Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
+                    if (forecast) {
+                        const date = new Date(forecast.datetime); // Récupérer la date
+                        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                        const formattedDate = date.toLocaleDateString('fr-FR', options);
+                        const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
 
-                // Récupérer les informations basées sur les cases à cocher
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        switch (checkbox.nextSibling.textContent.trim()) {
-                            case 'Latitude décimale de la commune':
-                                meteoInfo += `Latitude décimale de la commune : ${city.latitude}°<br>`;
-                                break;
-                            case 'Longitude décimale de la commune':
-                                meteoInfo += `Longitude décimale de la commune : ${city.longitude}°<br>`;
-                                break;
-                            case 'Cumul de pluie sur la journée':
-                                meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
-                                break;
-                            case 'Vent moyen':
-                                meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
-                                break;
-                            case 'Direction du vent':
-                                meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
-                                break;
-                        }
-                    }
-                });
+                        meteoInfo += `<strong>${capitalizedDate}</strong><br>Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
 
-                let icone = forecast.weather;
-                if (icone === 0) {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
-                } else if (icone >= 1 && icone <= 8) {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
-                } else if ((icone >= 10 && icone <= 16) || (icone >= 40 && icone <= 48) || (icone >= 210 && icone <= 212)) {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-6.svg';
-                } else if ((icone >= 20 && icone <= 32) || (icone >= 60 && icone <= 78) || (icone >= 220 && icone <= 232)) {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg';
-                } else if (icone >= 100 && icone <= 142) {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/thunder.svg';
-                } else if (icone === 235) {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg';
-                } else {
-                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
-                }
+                        // Récupérer les informations basées sur les cases à cocher
+                        checkboxes.forEach(checkbox => {
+                            if (checkbox.checked) {
+                                switch (checkbox.nextSibling.textContent.trim()) {
+                                    case 'Latitude décimale de la commune':
+                                        meteoInfo += `Latitude décimale de la commune : ${data.city.latitude}°<br>`;
+                                        break;
+                                    case 'Longitude décimale de la commune':
+                                        meteoInfo += `Longitude décimale de la commune : ${data.city.longitude}°<br>`;
+                                        break;
+                                    case 'Cumul de pluie sur la journée':
+                                        meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
+                                        break;
+                                    case 'Vent moyen':
+                                        meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
+                                        break;
+                                    case 'Direction du vent':
+                                        meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
+                                        break;
+                                }
+                            }
+                        });
 
-                meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
-                meteo.appendChild(imgmeteo);
-                meteo.style.display = "flex"; // Affiche les informations météo
-            } else {
-                meteo.innerHTML = 'Aucune donnée météo disponible.';
-                meteo.style.display = "none";
-            }
-        })
-        .catch(error => console.error('Erreur:', error));
+                      // Ajouter le pictogramme correspondant
+                      let icone = forecast.weather;
+                      let imgSrc = ''; // Initialise imgSrc
+                      if (icone === 0) {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
+                      } else if (icone >= 1 && icone <= 8) {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                      } else if ((icone >= 10 && icone <= 16) || (icone >= 40 && icone <= 48) || (icone >= 210 && icone <= 212)) {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-6.svg';
+                      } else if ((icone >= 20 && icone <= 32) || (icone >= 60 && icone <= 78) || (icone >= 220 && icone <= 232)) {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg';
+                      } else if (icone >= 100 && icone <= 142) {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/thunder.svg';
+                      } else if (icone === 235) {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg';
+                      } else {
+                          imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
+                      }
+
+                      meteoInfo += `<img src="${imgSrc}" alt="Météo"><br>`;
+                  }
+
+                  return meteoInfo; // Retourne les informations pour chaque jour
+              })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    return 'Erreur lors de la récupération des données.';
+                })
+        );
+    }
+
+    // Attendre que toutes les promesses soient résolues
+    Promise.all(meteoPromises)
+        .then(results => {
+            meteo.innerHTML = results.join('<br>'); // Affiche toutes les informations dans l'ordre
+            meteo.style.display = "flex"; // Affiche les informations météo
+        });
 }
+
+
 
 // Get elements
 let openModalBtn = document.getElementById('openModalBtn');
