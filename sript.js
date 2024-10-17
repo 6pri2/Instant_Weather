@@ -7,6 +7,8 @@ let jourValue = document.getElementById('jourValue');
 let scalerContainer = document.getElementById('scalerContainer'); // Le scaler de 1 à 7 jours
 let imgmeteo = document.createElement('img');
 
+
+
 select.style.display = 'none';
 meteo.style.display = 'none';
 scalerContainer.style.display = 'none'; // Masquer le scaler par défaut
@@ -25,6 +27,7 @@ cp.addEventListener('input', function() {
         meteo.style.display= 'none'
         meteo.innerHTML = ''; // Réinitialise l'affichage météo
         scalerContainer.style.display = 'none'; // Cache le scaler si le code postal est invalide
+        
     }
 });
 
@@ -58,7 +61,7 @@ function rechercherCommune(codePostal) {
 
             // Affiche le select s'il y a des résultats
             select.style.display = data.length > 0 ? 'block' : 'none';
-            scalerContainer.style.display = data.length > 0 ? 'block' : 'none'; // Affiche le scaler si des communes sont trouvées
+            scalerContainer.style.display = data.length > 0 ? 'flex' : 'none'; // Affiche le scaler si des communes sont trouvées
 
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
@@ -102,7 +105,7 @@ function afficherMeteo(insee, communes) {
     // Boucle pour chaque jour
     for (let i = 0; i < nombreDeJours; i++) {
         meteoPromises.push(
-            fetch(`https://api.meteo-concept.com/api/forecast/daily/${i}?token=4bba169b3e3365061d39563419ab23e5016c0f838ba282498439c41a00ef1091&insee=${insee}`)
+            fetch(`https://api.meteo-concept.com/api/forecast/daily/${i}?token=52e23be25c02c8f295940d471a11baa52d1eb824735d77339cd7fe4dc9577aab&insee=${insee}`)
                 .then(response => {
                     if (!response.ok) throw new Error('Erreur réseau');
                     return response.json();
@@ -117,26 +120,26 @@ function afficherMeteo(insee, communes) {
                         const formattedDate = date.toLocaleDateString('fr-FR', options);
                         const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
 
-                        meteoInfo += `<strong>${capitalizedDate}</strong><br>Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
+                        meteoInfo += `<strong>${capitalizedDate}</strong><br> 🌡 Température Min : ${forecast.tmin}°C<br> 🌡 Température Max : ${forecast.tmax}°C<br> ☔ Probabilité de Pluie : ${forecast.probarain}%<br> 🌅 Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
 
                         // Récupérer les informations basées sur les cases à cocher
                         checkboxes.forEach(checkbox => {
                             if (checkbox.checked) {
                                 switch (checkbox.nextSibling.textContent.trim()) {
                                     case 'Latitude décimale de la commune':
-                                        meteoInfo += `Latitude décimale de la commune : ${data.city.latitude}°<br>`;
+                                        meteoInfo += ` 🧭 Latitude décimale de la commune : ${data.city.latitude}°<br>`;
                                         break;
                                     case 'Longitude décimale de la commune':
-                                        meteoInfo += `Longitude décimale de la commune : ${data.city.longitude}°<br>`;
+                                        meteoInfo += ` 🧭 Longitude décimale de la commune : ${data.city.longitude}°<br>`;
                                         break;
                                     case 'Cumul de pluie sur la journée':
-                                        meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
+                                        meteoInfo += ` 💧 Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
                                         break;
                                     case 'Vent moyen':
-                                        meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
+                                        meteoInfo += ` 💨 Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
                                         break;
                                     case 'Direction du vent':
-                                        meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
+                                        meteoInfo += ` 🌬 Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
                                         break;
                                 }
                             }
@@ -163,7 +166,8 @@ function afficherMeteo(insee, communes) {
 
                       meteoInfo += `<img src="${imgSrc}" alt="Météo"><br>`;
                   }
-
+                  
+                  meteoInfo += '<hr>'
                   return meteoInfo; // Retourne les informations pour chaque jour
               })
                 .catch(error => {
@@ -172,7 +176,7 @@ function afficherMeteo(insee, communes) {
                 })
         );
     }
-
+    
     // Attendre que toutes les promesses soient résolues
     Promise.all(meteoPromises)
         .then(results => {

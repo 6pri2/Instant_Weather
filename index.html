@@ -15,19 +15,24 @@
 
     <div class="flex-grow">
         <h1 class="pacifico-regular">Instant Weather</h1>
-        <div class="recherche">
-        <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
-        <button id="openModalBtn"  class="fa-solid fa-filter fa-3x"></button>
+        <div class="ContainerRecherche">
+            <div class="recherche">
+            <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
+            <button id="openModalBtn"  class="fa-solid fa-filter fa-3x"></button>
+            </div>
         </div>
+
         <div class="affichage">
         <select id="commune"></select>
         <div id="scalerContainer" style="display: none;">
-            <label for="jourRange">Nombre de jours de prévision : </label>
+            <label class="pacifico-regular" for="jourRange">Nombre de jours de prévision : </label>
             <input type="range" id="jourRange" min="1" max="7" value="1">
-            <span id="jourValue">1</span> jour(s)
+            <span class="pacifico-regular" id="jourValue">1</span>
+            <p class="pacifico-regular">jour(s)</p>
         </div>
-        <div id="meteoDisplay"></div>
-        
+        <div id="contour">
+            <div id="meteoDisplay"></div>
+        </div>
         </div>
     </div>
     
@@ -36,7 +41,7 @@
 
 <!-- Modal Structure -->
 <div id="optionsModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-2/3">
         <h2 class="font-bold mb-4">Options Météo</h2>
         <form>
             <label><input type="checkbox"> Latitude décimale de la commune</label><br>
