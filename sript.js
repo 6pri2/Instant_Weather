@@ -85,37 +85,27 @@ function afficherMeteo(insee, communes) {
             const city = data.city; // Récupère les données de la ville
 
             if (forecast) {
-                let meteoInfo = '';
+                let meteoInfo = `Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
 
                 // Récupérer les informations basées sur les cases à cocher
                 checkboxes.forEach(checkbox => {
+
+
                     if (checkbox.checked) {
                         switch (checkbox.nextSibling.textContent.trim()) {
-                            case 'Température minimum':
-                                meteoInfo += `Température Min : ${forecast.tmin}°C<br>`;
-                                break;
-                            case 'Température maximale':
-                                meteoInfo += `Température Max : ${forecast.tmax}°C<br>`;
-                                break;
-                            case 'Probabilité de pluie':
-                                meteoInfo += `Probabilité de Pluie : ${forecast.probarain}%<br>`;
-                                break;
-                            case 'Nombre d\'heures d\'ensoleillement':
-                                meteoInfo += `Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
-                                break;
                             case 'Latitude décimale de la commune':
                                 meteoInfo += `Latitude décimale de la commune : ${city.latitude}°<br>`;
                                 break;
                             case 'Longitude décimale de la commune':
                                 meteoInfo += `Longitude décimale de la commune : ${city.longitude}°<br>`;
                                 break;
-                            case 'Cumul de pluie sur la journée en mm':
+                            case 'Cumul de pluie sur la journée':
                                 meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
                                 break;
-                            case 'Vent moyen à 10 mètres en km/h':
+                            case 'Vent moyen':
                                 meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
                                 break;
-                            case 'Direction du vent en degrés':
+                            case 'Direction du vent':
                                 meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
                                 break;
                         }
