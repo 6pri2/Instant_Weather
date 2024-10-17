@@ -18,7 +18,6 @@ cp.addEventListener('input', function() {
     } else {
         select.innerHTML = ''; // Réinitialise le select
         select.style.display = 'none'; // Cache le select
-        meteo.style.display= 'none';
         meteo.innerHTML = ''; // Réinitialise l'affichage météo
     }
 });
@@ -36,7 +35,7 @@ function rechercherCommune(codePostal) {
             communes = data; // Stocke les communes récupérées
             select.innerHTML = ''; // Réinitialise le contenu du select
 
-            // Ajoute une option par défa
+            // Ajoute une option par défaut
             const defaultOption = document.createElement('option');
             defaultOption.textContent = 'Choisir une commune';
             defaultOption.disabled = true; // Désactive l'option
@@ -88,7 +87,12 @@ function afficherMeteo(insee, communes) {
             const city = data.city; // Récupère les données de la ville
 
             if (forecast) {
-                let meteoInfo = `Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
+                const date = new Date(forecast.datetime); // Récupérer la date
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = date.toLocaleDateString('fr-FR', options);
+                const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
+
+                let meteoInfo = `<strong>${capitalizedDate}</strong><br>Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
 
                 // Récupérer les informations basées sur les cases à cocher
                 checkboxes.forEach(checkbox => {
@@ -136,7 +140,6 @@ function afficherMeteo(insee, communes) {
             } else {
                 meteo.innerHTML = 'Aucune donnée météo disponible.';
                 meteo.style.display = "none";
-                select.style.display="none";
             }
         })
         .catch(error => console.error('Erreur:', error));
