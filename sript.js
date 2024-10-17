@@ -4,9 +4,10 @@ let meteo = document.getElementById('meteoDisplay');
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let imgmeteo = document.createElement('img');
 
-
 select.style.display = 'none';
 meteo.style.display = 'none';
+
+let communes = []; // Variable pour stocker les communes récupérées
 
 // Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
@@ -17,6 +18,7 @@ cp.addEventListener('input', function() {
     } else {
         select.innerHTML = ''; // Réinitialise le select
         select.style.display = 'none'; // Cache le select
+        meteo.style.display= 'none';
         meteo.innerHTML = ''; // Réinitialise l'affichage météo
     }
 });
@@ -31,9 +33,10 @@ function rechercherCommune(codePostal) {
             return response.json();
         })
         .then(data => {
+            communes = data; // Stocke les communes récupérées
             select.innerHTML = ''; // Réinitialise le contenu du select
 
-            // Ajoute une option par défaut
+            // Ajoute une option par défa
             const defaultOption = document.createElement('option');
             defaultOption.textContent = 'Choisir une commune';
             defaultOption.disabled = true; // Désactive l'option
@@ -89,8 +92,6 @@ function afficherMeteo(insee, communes) {
 
                 // Récupérer les informations basées sur les cases à cocher
                 checkboxes.forEach(checkbox => {
-
-
                     if (checkbox.checked) {
                         switch (checkbox.nextSibling.textContent.trim()) {
                             case 'Latitude décimale de la commune':
@@ -109,38 +110,33 @@ function afficherMeteo(insee, communes) {
                                 meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
                                 break;
                         }
-                        
                     }
                 });
-                let icone = forecast.weather
-                if (icone === 0){
-                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
+
+                let icone = forecast.weather;
+                if (icone === 0) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
+                } else if (icone >= 1 && icone <= 8) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                } else if ((icone >= 10 && icone <= 16) || (icone >= 40 && icone <= 48) || (icone >= 210 && icone <= 212)) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-6.svg';
+                } else if ((icone >= 20 && icone <= 32) || (icone >= 60 && icone <= 78) || (icone >= 220 && icone <= 232)) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg';
+                } else if (icone >= 100 && icone <= 142) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/thunder.svg';
+                } else if (icone === 235) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg';
+                } else {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
                 }
-                else if (icone>=1 && icone <=8){
-                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
-                }
-                else if ((icone>=10 && icone <=16)||(icone>=40 && icone <=48)||(icone>=210 && icone <=212)){
-                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-6.svg';
-                }
-                else if ((icone>=20 && icone <=32)||(icone>=60 && icone <=78)||(icone>=220 && icone <=232)){
-                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg';
-                }
-                else if (icone>=100 && icone <=142){
-                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/thunder.svg';
-                }
-                else if (icone ===235){ 
-                    imgmeteo.src= 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg';
-                }
-                else {
-                    imgmeteo.src='https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
-                }
-                
+
                 meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
                 meteo.appendChild(imgmeteo);
                 meteo.style.display = "flex"; // Affiche les informations météo
             } else {
                 meteo.innerHTML = 'Aucune donnée météo disponible.';
                 meteo.style.display = "none";
+                select.style.display="none";
             }
         })
         .catch(error => console.error('Erreur:', error));
@@ -159,11 +155,23 @@ openModalBtn.addEventListener('click', function() {
 // Close modal when clicking the close button
 closeModalBtn.addEventListener('click', function() {
     optionsModal.classList.remove('active');
+
+    // Relance la recherche d'informations météo
+    const selectedCommune = select.value;
+    if (selectedCommune) {
+        afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
+    }
 });
 
 // Optionally close the modal when clicking outside of the modal content
 window.addEventListener('click', function(event) {
     if (event.target === optionsModal) {
         optionsModal.classList.remove('active');
+
+        // Relance la recherche d'informations météo
+        const selectedCommune = select.value;
+        if (selectedCommune) {
+            afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
+        }
     }
 });
