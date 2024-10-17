@@ -5,10 +5,13 @@ let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let jourRange = document.getElementById('jourRange');
 let jourValue = document.getElementById('jourValue');
 let scalerContainer = document.getElementById('scalerContainer'); // Le scaler de 1 à 7 jours
+let imgmeteo = document.createElement('img');
 
 select.style.display = 'none';
 meteo.style.display = 'none';
 scalerContainer.style.display = 'none'; // Masquer le scaler par défaut
+
+let communes = []; // Variable pour stocker les communes récupérées
 
 // Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
@@ -34,6 +37,7 @@ function rechercherCommune(codePostal) {
             return response.json();
         })
         .then(data => {
+            communes = data; // Stocke les communes récupérées
             select.innerHTML = ''; // Réinitialise le contenu du select
 
             // Ajoute une option par défaut
@@ -95,45 +99,56 @@ function afficherMeteo(insee, communes) {
             const city = data.city; // Récupère les données de la ville
 
             if (forecast) {
-                let meteoInfo = '';
+                const date = new Date(forecast.datetime); // Récupérer la date
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = date.toLocaleDateString('fr-FR', options);
+                const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
+
+                let meteoInfo = `<strong>${capitalizedDate}</strong><br>Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
 
                 // Récupérer les informations basées sur les cases à cocher
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
                         switch (checkbox.nextSibling.textContent.trim()) {
-                            case 'Température minimum':
-                                meteoInfo += `Température Min : ${forecast.tmin}°C<br>`;
-                                break;
-                            case 'Température maximale':
-                                meteoInfo += `Température Max : ${forecast.tmax}°C<br>`;
-                                break;
-                            case 'Probabilité de pluie':
-                                meteoInfo += `Probabilité de Pluie : ${forecast.probarain}%<br>`;
-                                break;
-                            case 'Nombre d\'heures d\'ensoleillement':
-                                meteoInfo += `Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
-                                break;
                             case 'Latitude décimale de la commune':
                                 meteoInfo += `Latitude décimale de la commune : ${city.latitude}°<br>`;
                                 break;
                             case 'Longitude décimale de la commune':
                                 meteoInfo += `Longitude décimale de la commune : ${city.longitude}°<br>`;
                                 break;
-                            case 'Cumul de pluie sur la journée en mm':
+                            case 'Cumul de pluie sur la journée':
                                 meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
                                 break;
-                            case 'Vent moyen à 10 mètres en km/h':
+                            case 'Vent moyen':
                                 meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
                                 break;
-                            case 'Direction du vent en degrés':
+                            case 'Direction du vent':
                                 meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
                                 break;
                         }
                     }
                 });
 
+                let icone = forecast.weather;
+                if (icone === 0) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
+                } else if (icone >= 1 && icone <= 8) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/cloudy.svg';
+                } else if ((icone >= 10 && icone <= 16) || (icone >= 40 && icone <= 48) || (icone >= 210 && icone <= 212)) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-6.svg';
+                } else if ((icone >= 20 && icone <= 32) || (icone >= 60 && icone <= 78) || (icone >= 220 && icone <= 232)) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/snowy-6.svg';
+                } else if (icone >= 100 && icone <= 142) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/thunder.svg';
+                } else if (icone === 235) {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-7.svg';
+                } else {
+                    imgmeteo.src = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
+                }
+
                 meteo.innerHTML = meteoInfo || 'Aucune information sélectionnée.';
-                meteo.style.display = "block"; // Affiche les informations météo
+                meteo.appendChild(imgmeteo);
+                meteo.style.display = "flex"; // Affiche les informations météo
             } else {
                 meteo.innerHTML = 'Aucune donnée météo disponible.';
                 meteo.style.display = "none";
@@ -155,11 +170,23 @@ openModalBtn.addEventListener('click', function() {
 // Close modal when clicking the close button
 closeModalBtn.addEventListener('click', function() {
     optionsModal.classList.remove('active');
+
+    // Relance la recherche d'informations météo
+    const selectedCommune = select.value;
+    if (selectedCommune) {
+        afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
+    }
 });
 
 // Optionally close the modal when clicking outside of the modal content
 window.addEventListener('click', function(event) {
     if (event.target === optionsModal) {
         optionsModal.classList.remove('active');
+
+        // Relance la recherche d'informations météo
+        const selectedCommune = select.value;
+        if (selectedCommune) {
+            afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
+        }
     }
 });
