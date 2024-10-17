@@ -1,4 +1,4 @@
-🌦️ Instant Weather
+#🌦️ Instant Weather
 
 🌍 Description du projet
 Instant Weather est une application Web interactive permettant à l'utilisateur d'afficher les informations météorologiques de la commune de son choix en saisissant un code postal. 
@@ -23,8 +23,6 @@ Température maximale 🔥
 Probabilité de pluie 🌧️
 Nombre d'heures d'ensoleillement ☀️
 
-⚠️ Responsive et conforme aux standards HTML/CSS (W3C) et aux normes d'accessibilité WCAG AA 2.0 ⚠️
-
 Version 2 (Avancée)
 Sélection du nombre de jours de prévisions (1 à 7 jours)
 Options supplémentaires à afficher :
@@ -32,6 +30,8 @@ Latitude et longitude 📍
 Cumul de pluie en mm 🌧️
 Vent moyen et direction du vent 💨
 → Affichage des résultats dans des cartes personnalisées (WeatherCard)
+
+⚠️ Le site doit être responsive et conforme aux standards HTML/CSS (W3C) et aux normes d'accessibilité WCAG AA 2.0 ⚠️
 
 🌐 API Utilisées
 API de découpage administratif par commune
