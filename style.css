@@ -1,7 +1,14 @@
+html{
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+}
+
 body {
     display: flex;
     justify-content: center; /* Centre horizontalement */
     background-color: #0182A6;
+    width: 100%;
+    height: 100%;
 }
 
 .container {
@@ -21,14 +28,20 @@ body {
     margin-left: 20px; /* Espace entre le contenu principal et le menu */
 }
 
-.pacifico-regular {
+ .pacifico-regular  {
     font-family: "Pacifico", cursive;
-    font-weight: 400;
+    
     font-style: normal;
     color: white;
     border-color: black;
     text-align: center;
-    font-size: 600%;
+    font-size: 400%;
+}
+
+.ContainerRecherche{
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
 }
 
 input[type=text] {
@@ -37,6 +50,7 @@ input[type=text] {
     border-radius: 50px;
     margin: 1%;
     padding: 1%;
+
 }
 
 select {
@@ -49,9 +63,8 @@ select {
 }
 
 #meteoDisplay{
-    flex-direction: column;
     align-items: center;
-    padding: 10%;
+    padding: 5%;
     border-radius: 15px;
     color: white;
     font-size: 120%;
@@ -60,11 +73,13 @@ select {
     margin-right: 10%;
     margin-top: 2%;
     margin-bottom: 2%;
-
+    width: 90%;
     
 }
 
-#meteoDisplay > img{
+
+
+#meteoDisplay img{
     padding: 10%;
     border-radius: 15px;
     color: white;
@@ -72,10 +87,31 @@ select {
     background-color: #dff3ff;
     margin: 5%;
     width: 100%;
+    height: 100%;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
 
 
+#meteoDisplay > div{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    width: 90%;
+    height: 90%;
+    border: solid white 3px;
+    border-radius: 15px;
+    padding: 5%;
+    align-items: center;
+    padding-bottom: 20%;
+}
+
+.fig{
+    width: 40%;
+    height: auto;
+    margin-bottom: 10%;
+}
 
 
 .modal {
@@ -94,8 +130,8 @@ select {
     background-color: white;
     padding: 1%;
     border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
+    max-width: 200%;
+    width: 200%;
     max-width: 90vw; /* Limiter la largeur à 90% de la vue */
     padding: 2rem;
 }
@@ -105,14 +141,101 @@ select {
 }
 .recherche{
     display: flex;
+    align-items: center;
     margin: 2%;
+    width: 60%;
 }
 .affichage{
     display: flex ;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 #commune{
-   width: 90%;
+   width: 50%;
 }
 
+#scalerContainer{
+    margin: 1%;
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+    font-size: 35%;
+}
+
+.contour {
+    background-color: rgb(86, 160, 238);
+    border-radius: 15px;
+    padding: 0.5%;
+    width: 90%;
+    height: 120vh; /* Fixe la hauteur, tu peux ajuster cette valeur */
+    overflow-y: auto; /* Ajoute une barre de défilement verticale si le contenu dépasse la hauteur */
+    
+    box-sizing: border-box; /* S'assure que padding est inclus dans la taille totale */
+    margin-bottom: 2%;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+
+
+.contour::-webkit-scrollbar {
+    width: 12px;
+}
+
+
+
+.contour::-webkit-scrollbar-track {
+    border-radius: 8px;
+    background-color: #6eccd3;
+    
+}
+
+.contour::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #24b6fac9;
+}
+
+
+
+
+
+
+
+/* Responsivité pour la modale sur les petits écrans */
+@media (max-width: 768px) {
+    .modal .modal-content {
+        width: 100%; /* Prend plus de place sur petits écrans */
+        padding: 15px; /* Réduit le padding pour maximiser l'espace */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal .modal-content {
+        width: 95%; /* Presque plein écran sur très petits écrans */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal .modal-content {
+        width: 95%; /* Presque plein écran sur très petits écrans */
+        padding: 10px;
+    }
+}
+
+@media screen and  (max-width: 767px) {
+    #meteoDisplay{
+        display: grid;
+        grid-column: 1fr;
+    }
+}
+
+/* Pour les écrans moyens (tablettes) */
+@media screen and (max-width: 768px) {
+ 
+}
+
+/* Pour les grands écrans (ordinateurs) */
+@media screen and (min-width: 769px) {
+
+}
