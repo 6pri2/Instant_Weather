@@ -1,17 +1,25 @@
+/*Initiation des variables*/
+
 let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
 let meteo = document.getElementById('meteoDisplay');
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let jourRange = document.getElementById('jourRange');
 let jourValue = document.getElementById('jourValue');
-let scalerContainer = document.getElementById('scalerContainer'); // Le scaler de 1 à 7 jours
+let scalerContainer = document.getElementById('scalerContainer'); 
 let imgmeteo = document.createElement('img');
+let communes = []; 
+let openModalBtn = document.getElementById('openModalBtn');
+let closeModalBtn = document.getElementById('closeModalBtn');
+let optionsModal = document.getElementById('optionsModal');
+
+/* affichage off */
 
 select.style.display = 'none';
 meteo.style.display = 'none';
-scalerContainer.style.display = 'none'; // Masquer le scaler par défaut
+scalerContainer.style.display = 'none'; 
 
-let communes = []; // Variable pour stocker les communes récupérées
+
 
 // Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
@@ -58,7 +66,7 @@ function rechercherCommune(codePostal) {
 
             // Affiche le select s'il y a des résultats
             select.style.display = data.length > 0 ? 'block' : 'none';
-            scalerContainer.style.display = data.length > 0 ? 'block' : 'none'; // Affiche le scaler si des communes sont trouvées
+            scalerContainer.style.display = data.length > 0 ? 'flex' : 'none'; // Affiche le scaler si des communes sont trouvées
 
             // Ajoute un écouteur d'événements pour la sélection d'une commune
             select.addEventListener('change', function() {
@@ -82,13 +90,29 @@ function rechercherCommune(codePostal) {
 
 // Affiche la valeur du scaler (nombre de jours) dynamiquement
 jourRange.addEventListener('input', function() {
+    
     jourValue.textContent = this.value;
 
     // Relance la fonction afficherMeteo avec la commune sélectionnée
+
     const selectedCommune = select.value;
+
     if (selectedCommune) {
         afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
     }
+
+    //change l'affichage en fonction du nombre de jours
+
+    if(jourValue.textContent == '1'){
+        meteo.style.gridTemplateColumns='1fr'
+    }
+    if(jourValue.textContent == '2' || jourValue.textContent == '4'){
+        meteo.style.gridTemplateColumns='1fr 1fr'
+    }
+    if(jourValue.textContent == '3' || jourValue.textContent == '5' || jourValue.textContent == '6' || jourValue.textContent == '7'){
+        meteo.style.gridTemplateColumns='1fr 1fr 1fr'
+    }
+    
 });
 
 // Fonction pour afficher la météo pour la commune sélectionnée
@@ -102,7 +126,7 @@ function afficherMeteo(insee, communes) {
     // Boucle pour chaque jour
     for (let i = 0; i < nombreDeJours; i++) {
         meteoPromises.push(
-            fetch(`https://api.meteo-concept.com/api/forecast/daily/${i}?token=4bba169b3e3365061d39563419ab23e5016c0f838ba282498439c41a00ef1091&insee=${insee}`)
+            fetch(`https://api.meteo-concept.com/api/forecast/daily/${i}?token=52e23be25c02c8f295940d471a11baa52d1eb824735d77339cd7fe4dc9577aab&insee=${insee}`)
                 .then(response => {
                     if (!response.ok) throw new Error('Erreur réseau');
                     return response.json();
@@ -110,41 +134,14 @@ function afficherMeteo(insee, communes) {
                 .then(data => {
                     const forecast = data.forecast;
                     let meteoInfo = '';
+                    meteoInfo += '<div class=" div'+i+' ">';
 
                     if (forecast) {
-                        const date = new Date(forecast.datetime); // Récupérer la date
-                        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                        const formattedDate = date.toLocaleDateString('fr-FR', options);
-                        const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
-
-                        meteoInfo += `<strong>${capitalizedDate}</strong><br>Température Min : ${forecast.tmin}°C<br>Température Max : ${forecast.tmax}°C<br>Probabilité de Pluie : ${forecast.probarain}%<br>Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
-
-                        // Récupérer les informations basées sur les cases à cocher
-                        checkboxes.forEach(checkbox => {
-                            if (checkbox.checked) {
-                                switch (checkbox.nextSibling.textContent.trim()) {
-                                    case 'Latitude décimale de la commune':
-                                        meteoInfo += `Latitude décimale de la commune : ${data.city.latitude}°<br>`;
-                                        break;
-                                    case 'Longitude décimale de la commune':
-                                        meteoInfo += `Longitude décimale de la commune : ${data.city.longitude}°<br>`;
-                                        break;
-                                    case 'Cumul de pluie sur la journée':
-                                        meteoInfo += `Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
-                                        break;
-                                    case 'Vent moyen':
-                                        meteoInfo += `Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
-                                        break;
-                                    case 'Direction du vent':
-                                        meteoInfo += `Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
-                                        break;
-                                }
-                            }
-                        });
 
                       // Ajouter le pictogramme correspondant
                       let icone = forecast.weather;
-                      let imgSrc = ''; // Initialise imgSrc
+                      let imgSrc = ''; 
+
                       if (icone === 0) {
                           imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
                       } else if (icone >= 1 && icone <= 8) {
@@ -161,10 +158,43 @@ function afficherMeteo(insee, communes) {
                           imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/rainy-2.svg';
                       }
 
-                      meteoInfo += `<img src="${imgSrc}" alt="Météo"><br>`;
-                  }
+                      meteoInfo += ` <figure class="fig"> <img src="${imgSrc}" alt="Météo"> </figure>`;
 
-                  return meteoInfo; // Retourne les informations pour chaque jour
+                        const date = new Date(forecast.datetime); // Récupérer la date
+                        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                        const formattedDate = date.toLocaleDateString('fr-FR', options);
+                        const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); 
+
+                        meteoInfo += `<strong>${capitalizedDate}</strong><br> 🌡 Température Min : ${forecast.tmin}°C<br> 🌡 Température Max : ${forecast.tmax}°C<br> ☔ Probabilité de Pluie : ${forecast.probarain}%<br> 🌅 Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
+
+                        // Récupérer les informations basées sur les cases à cocher
+                        checkboxes.forEach(checkbox => {
+                            if (checkbox.checked) {
+                                switch (checkbox.nextSibling.textContent.trim()) {
+                                    case 'Latitude décimale de la commune':
+                                        meteoInfo += ` 🧭 Latitude décimale de la commune : ${data.city.latitude}°<br>`;
+                                        break;
+                                    case 'Longitude décimale de la commune':
+                                        meteoInfo += ` 🧭 Longitude décimale de la commune : ${data.city.longitude}°<br>`;
+                                        break;
+                                    case 'Cumul de pluie sur la journée':
+                                        meteoInfo += ` 💧 Cumul de pluie sur la journée en mm : ${forecast.rr1}mm<br>`;
+                                        break;
+                                    case 'Vent moyen':
+                                        meteoInfo += ` 💨 Vent moyen à 10 mètres en km/h : ${forecast.wind10m} km/h<br>`;
+                                        break;
+                                    case 'Direction du vent':
+                                        meteoInfo += ` 🌬 Direction du vent en degrés : ${forecast.dirwind10m}°<br>`;
+                                        break;
+                                }
+                            }
+                        });
+
+                      
+                  }
+                  
+                  meteoInfo += '</div>'
+                  return meteoInfo 
               })
                 .catch(error => {
                     console.error('Erreur:', error);
@@ -176,24 +206,17 @@ function afficherMeteo(insee, communes) {
     // Attendre que toutes les promesses soient résolues
     Promise.all(meteoPromises)
         .then(results => {
-            meteo.innerHTML = results.join('<br>'); // Affiche toutes les informations dans l'ordre
-            meteo.style.display = "flex"; // Affiche les informations météo
+            meteo.innerHTML = results.join('') 
+            meteo.style.display = "grid"; 
         });
 }
 
-
-
-// Get elements
-let openModalBtn = document.getElementById('openModalBtn');
-let closeModalBtn = document.getElementById('closeModalBtn');
-let optionsModal = document.getElementById('optionsModal');
-
-// Open modal when clicking the button
+// Faire apparaitre la fenêtre modale lorsqu'on appuie sur le bouton
 openModalBtn.addEventListener('click', function() {
     optionsModal.classList.add('active');
 });
 
-// Close modal when clicking the close button
+// Ferme la fenêtre modale si on clique sur le bouton fermer
 closeModalBtn.addEventListener('click', function() {
     optionsModal.classList.remove('active');
 
@@ -204,7 +227,7 @@ closeModalBtn.addEventListener('click', function() {
     }
 });
 
-// Optionally close the modal when clicking outside of the modal content
+// Ferme la fenêtre modale si on clique en dehors de la fenêtre
 window.addEventListener('click', function(event) {
     if (event.target === optionsModal) {
         optionsModal.classList.remove('active');

@@ -1,42 +1,78 @@
+/* Style de base de la page*/
+
+html{
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+}
+
 body {
     display: flex;
     justify-content: center; /* Centre horizontalement */
     background-color: #0182A6;
-}
-
-.container {
-    display: flex; /* Flexbox pour le contenu principal et le menu */
-}
-
-.main-content {
-    flex: 1; /* Prend l'espace restant */
-    padding: 20px; /* Ajoute un peu de padding */
-}
-
-.menu {
-    width: 250px; /* Largeur fixe pour le menu */
-    background-color: #f1f1f1;
-    padding: 20px;
-    border-radius: 15px;
-    margin-left: 20px; /* Espace entre le contenu principal et le menu */
-}
-
-.pacifico-regular {
-    font-family: "Pacifico", cursive;
-    font-weight: 400;
-    font-style: normal;
-    color: white;
-    border-color: black;
-    text-align: center;
-    font-size: 600%;
-}
-
-input[type=text] {
     width: 100%;
-    transition: width 0.4s ease-in-out;
-    border-radius: 50px;
-    margin: 1%;
-    padding: 1%;
+    height: 100%;
+}
+
+/* Style pour l'affichage des informations météorologiques*/
+
+#meteoDisplay{
+    align-items: center;
+    padding: 5%;
+    border-radius: 15px;
+    color: white;
+    font-size: 120%;
+    background-color: #8ED4FF;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 90%;
+    
+}
+
+#meteoDisplay img{
+    padding: 10%;
+    border-radius: 15px;
+    color: white;
+    font-size: 120%;
+    background-color: #dff3ff;
+    margin: 5%;
+    width: 100%;
+    height: 100%;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+#meteoDisplay > div{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    width: 90%;
+    height: 90%;
+    border: solid white 3px;
+    border-radius: 15px;
+    padding: 5%;
+    align-items: center;
+    padding-bottom: 20%;
+}
+
+.fig{
+    width: 40%;
+    height: auto;
+    margin-bottom: 10%;
+}
+
+.affichage{
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Style pour la sélection de la commune */
+
+#commune{
+   width: 50%;
 }
 
 select {
@@ -48,35 +84,53 @@ select {
     background-color: #f1f1f1;
 }
 
-#meteoDisplay{
+/* Style pour la recherche par code postal */
+
+.ContainerRecherche{
+    display: flex ;
     flex-direction: column;
     align-items: center;
-    padding: 10%;
-    border-radius: 15px;
-    color: white;
-    font-size: 120%;
-    background-color: #8ED4FF;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 2%;
-    margin-bottom: 2%;
-
-    
 }
 
-#meteoDisplay > img{
-    padding: 10%;
-    border-radius: 15px;
-    color: white;
-    font-size: 120%;
-    background-color: #dff3ff;
-    margin: 5%;
+input[type=text] {
     width: 100%;
+    transition: width 0.4s ease-in-out;
+    border-radius: 50px;
+    margin: 1%;
+    padding: 1%;
+
 }
 
+.recherche{
+    display: flex;
+    align-items: center;
+    margin: 2%;
+    width: 60%;
+}
 
+/*Style pour la police d'écriture*/
 
+.pacifico-regular  {
+    font-family: "Pacifico", cursive;
+    
+    font-style: normal;
+    color: white;
+    border-color: black;
+    text-align: center;
+    font-size: 400%;
+}
 
+/* Style pour la sélécetion du nombre de jours */
+
+#scalerContainer{
+    margin: 1%;
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+    font-size: 35%;
+}
+
+/* Style de la fenêtre modale*/
 
 .modal {
     display: none;
@@ -85,7 +139,7 @@ select {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.6); 
     justify-content: center;
     align-items: center;
 }
@@ -94,25 +148,44 @@ select {
     background-color: white;
     padding: 1%;
     border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    max-width: 90vw; /* Limiter la largeur à 90% de la vue */
+    max-width: 200%;
+    width: 200%;
+    max-width: 90vw; 
     padding: 2rem;
 }
 
 .modal.active {
-    display: flex; /* Show the modal when active */
-}
-.recherche{
-    display: flex;
-    margin: 2%;
-}
-.affichage{
-    display: flex ;
-    flex-direction: column;
-    align-items: center;
-}
-#commune{
-   width: 90%;
+    display: flex; 
 }
 
+
+/* Query pour la Responsivité de la page */
+
+@media (max-width: 768px) {
+    .modal .modal-content {
+        width: 100%; 
+        padding: 15px; 
+    }
+}
+
+@media (max-width: 480px) {
+    .modal .modal-content {
+        width: 95%; 
+        padding: 10px;
+    }
+}
+
+@media screen and  (max-width: 767px) {
+    #meteoDisplay{
+        display: grid;
+        grid-column: 1fr;
+    }
+}
+
+@media screen and (max-width: 768px) {
+ 
+}
+
+@media screen and (min-width: 769px) {
+
+}

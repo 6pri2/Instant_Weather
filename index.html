@@ -14,29 +14,37 @@
 <body class="flex">
 
     <div class="flex-grow">
+        <!-- Titre -->
         <h1 class="pacifico-regular">Instant Weather</h1>
-        <div class="recherche">
-        <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
-        <button id="openModalBtn"  class="fa-solid fa-filter fa-3x"></button>
+        <!-- Recherche par code postal -->
+        <div class="ContainerRecherche">
+            <div class="recherche">
+            <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
+            <button id="openModalBtn"  class="fa-solid fa-filter fa-3x"></button>
+            </div>
         </div>
+
         <div class="affichage">
-        <select id="commune"></select>
-        <div id="scalerContainer" style="display: none;">
-            <label for="jourRange">Nombre de jours de prévision : </label>
-            <input type="range" id="jourRange" min="1" max="7" value="1">
-            <span id="jourValue">1</span> jour(s)
-        </div>
-        <div id="meteoDisplay"></div>
-        
+            <!-- Recherche par commune -->
+            <select id="commune"></select>
+            <!-- Sélection du nombre de jours -->
+            <div id="scalerContainer" style="display: none;">
+                <label class="pacifico-regular" for="jourRange">Nombre de jours de prévision : </label>
+                <input type="range" id="jourRange" min="1" max="7" value="1">
+                <span class="pacifico-regular" id="jourValue">1</span>
+                <p class="pacifico-regular">jour(s)</p>
+            </div>
+            <!-- Affichage des informations météorologiques -->
+            <div id="meteoDisplay"></div>
         </div>
     </div>
     
 
 
 
-<!-- Modal Structure -->
+<!-- Fenêtre modale pour les filtres -->
 <div id="optionsModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-2/3">
         <h2 class="font-bold mb-4">Options Météo</h2>
         <form>
             <label><input type="checkbox"> Latitude décimale de la commune</label><br>
