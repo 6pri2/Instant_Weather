@@ -13,7 +13,20 @@ body {
     height: 100%;
 }
 
-/* Style pour l'affichage des informations météorologiques*/
+/* Style pour annuler l'affichage des labels */
+
+.annulleAffichage {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+/* Style pour l'affichage des informations météorologiques */
 
 #meteoDisplay{
     align-items: center;
@@ -26,7 +39,7 @@ body {
     margin-right: 10%;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 90%;
+    width: 50%;
     
 }
 
@@ -173,9 +186,3 @@ input[type=text] {
     }
 }
 
-@media screen and  (max-width: 767px) {
-    #meteoDisplay{
-        display: grid;
-        grid-column: 1fr;
-    }
-}

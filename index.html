@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -20,6 +21,7 @@
         <!-- Recherche par code postal -->
         <div class="ContainerRecherche">
             <div class="recherche">
+            <label for="codePostal" class="annulleAffichage"> COde</label>
             <input type="text" id="codePostal" placeholder="Entrez un code Postal" maxlength="5">
             <button id="openModalBtn"  class="fa-solid fa-filter fa-3x"></button>
             </div>
@@ -28,6 +30,7 @@
         <div class="affichage">
 
             <!-- Recherche par commune -->
+            <label for="commune" class="annulleAffichage">Commune : </label>
             <select id="commune"></select>
             <!-- Sélection du nombre de jours -->
             <div id="scalerContainer" style="display: none;">
@@ -48,13 +51,15 @@
 <!-- Fenêtre modale pour les filtres -->
 <div id="optionsModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
     <div class="bg-white p-8 rounded-lg shadow-lg w-2/3">
-        <h2 class="font-bold mb-4">Options Météo</h2>
         <form>
-            <label><input type="checkbox"> Latitude décimale de la commune</label><br>
-            <label><input type="checkbox"> Longitude décimale de la commune</label><br>
-            <label><input type="checkbox"> Cumul de pluie sur la journée</label><br>
-            <label><input type="checkbox"> Vent moyen</label><br>
-            <label><input type="checkbox"> Direction du vent</label><br>
+            <fieldset>
+                <legend class="font-bold mb-4">Options Météo</legend>
+                <label for="Latitude"><input type="checkbox" id="Latitude"> Latitude décimale de la commune</label><br>
+                <label for="Longitude"><input type="checkbox" id="Longitude"> Longitude décimale de la commune</label><br>
+                <label for="pluie"><input type="checkbox" id="pluie"> Cumul de pluie sur la journée</label><br>
+                <label for="vent"><input type="checkbox" id="vent"> Vent moyen</label><br>
+                <label for="direction"><input type="checkbox" id="direction"> Direction du vent</label><br>
+            </fieldset>
         </form>
         <button id="closeModalBtn" class="mt-4 bg-red-500 text-white p-2 rounded">Fermer</button>
     </div>

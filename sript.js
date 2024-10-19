@@ -19,6 +19,8 @@ select.style.display = 'none';
 meteo.style.display = 'none';
 scalerContainer.style.display = 'none'; 
 
+/* Affichage de base pour les infos météorologiques */
+
 
 
 // Écouteur d'événement pour le champ de code postal
@@ -103,12 +105,18 @@ jourRange.addEventListener('input', function() {
     //change l'affichage en fonction du nombre de jours
     if(jourValue.textContent == '1'){
         meteo.style.gridTemplateColumns='1fr'
+        meteo.style.width='50%'
+        meteo.style.height='auto'
     }
     if(jourValue.textContent == '2' || jourValue.textContent == '4'){
         meteo.style.gridTemplateColumns='1fr 1fr'
+        meteo.style.width='90%'
+        meteo.style.height='auto'
     }
     if(jourValue.textContent == '3' || jourValue.textContent == '5' || jourValue.textContent == '6' || jourValue.textContent == '7'){
         meteo.style.gridTemplateColumns='1fr 1fr 1fr'
+        meteo.style.width='90%'
+        meteo.style.height='auto'
     }
     
 });
