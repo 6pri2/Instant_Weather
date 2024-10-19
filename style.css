@@ -1,3 +1,5 @@
+/* Style de base de la page*/
+
 html{
     display: flex;
     justify-content: center; /* Centre horizontalement */
@@ -11,56 +13,7 @@ body {
     height: 100%;
 }
 
-.container {
-    display: flex; /* Flexbox pour le contenu principal et le menu */
-}
-
-.main-content {
-    flex: 1; /* Prend l'espace restant */
-    padding: 20px; /* Ajoute un peu de padding */
-}
-
-.menu {
-    width: 250px; /* Largeur fixe pour le menu */
-    background-color: #f1f1f1;
-    padding: 20px;
-    border-radius: 15px;
-    margin-left: 20px; /* Espace entre le contenu principal et le menu */
-}
-
- .pacifico-regular  {
-    font-family: "Pacifico", cursive;
-    
-    font-style: normal;
-    color: white;
-    border-color: black;
-    text-align: center;
-    font-size: 400%;
-}
-
-.ContainerRecherche{
-    display: flex ;
-    flex-direction: column;
-    align-items: center;
-}
-
-input[type=text] {
-    width: 100%;
-    transition: width 0.4s ease-in-out;
-    border-radius: 50px;
-    margin: 1%;
-    padding: 1%;
-
-}
-
-select {
-    width: 100%;
-    padding: 1%;
-    margin: 1%;
-    border: none;
-    border-radius: 30px;
-    background-color: #f1f1f1;
-}
+/* Style pour l'affichage des informations météorologiques*/
 
 #meteoDisplay{
     align-items: center;
@@ -77,8 +30,6 @@ select {
     
 }
 
-
-
 #meteoDisplay img{
     padding: 10%;
     border-radius: 15px;
@@ -90,8 +41,6 @@ select {
     height: 100%;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
-
-
 
 #meteoDisplay > div{
     display: flex;
@@ -107,12 +56,81 @@ select {
     padding-bottom: 20%;
 }
 
+
 .fig{
     width: 40%;
     height: auto;
     margin-bottom: 10%;
 }
 
+.affichage{
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Style pour la sélection de la commune */
+
+#commune{
+   width: 50%;
+}
+
+select {
+    width: 100%;
+    padding: 1%;
+    margin: 1%;
+    border: none;
+    border-radius: 30px;
+    background-color: #f1f1f1;
+}
+
+/* Style pour la recherche par code postal */
+
+.ContainerRecherche{
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type=text] {
+    width: 100%;
+    transition: width 0.4s ease-in-out;
+    border-radius: 50px;
+    margin: 1%;
+    padding: 1%;
+
+}
+
+.recherche{
+    display: flex;
+    align-items: center;
+    margin: 2%;
+    width: 60%;
+}
+
+/*Style pour la police d'écriture*/
+.pacifico-regular  {
+    font-family: "Pacifico", cursive;
+    
+    font-style: normal;
+    color: white;
+    border-color: black;
+    text-align: center;
+    font-size: 400%;
+}
+
+/* Style pour la sélécetion du nombre de jours */
+
+#scalerContainer{
+    margin: 1%;
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+    font-size: 35%;
+}
+
+/* Style de la fenêtre modale*/
 
 .modal {
     display: none;
@@ -121,7 +139,7 @@ select {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.6); 
     justify-content: center;
     align-items: center;
 }
@@ -132,93 +150,25 @@ select {
     border-radius: 8px;
     max-width: 200%;
     width: 200%;
-    max-width: 90vw; /* Limiter la largeur à 90% de la vue */
+    max-width: 90vw; 
     padding: 2rem;
 }
 
 .modal.active {
-    display: flex; /* Show the modal when active */
-}
-.recherche{
-    display: flex;
-    align-items: center;
-    margin: 2%;
-    width: 60%;
-}
-.affichage{
-    display: flex ;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-#commune{
-   width: 50%;
+    display: flex; 
 }
 
-#scalerContainer{
-    margin: 1%;
-    display: flex ;
-    flex-direction: column;
-    align-items: center;
-    font-size: 35%;
-}
-
-.contour {
-    background-color: rgb(86, 160, 238);
-    border-radius: 15px;
-    padding: 0.5%;
-    width: 90%;
-    height: 120vh; /* Fixe la hauteur, tu peux ajuster cette valeur */
-    overflow-y: auto; /* Ajoute une barre de défilement verticale si le contenu dépasse la hauteur */
-    
-    box-sizing: border-box; /* S'assure que padding est inclus dans la taille totale */
-    margin-bottom: 2%;
-    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-}
-
-
-
-.contour::-webkit-scrollbar {
-    width: 12px;
-}
-
-
-
-.contour::-webkit-scrollbar-track {
-    border-radius: 8px;
-    background-color: #6eccd3;
-    
-}
-
-.contour::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-    background-color: #24b6fac9;
-}
-
-
-
-
-
-
-
-/* Responsivité pour la modale sur les petits écrans */
+/* Query pour la Responsivité de la page */
 @media (max-width: 768px) {
     .modal .modal-content {
-        width: 100%; /* Prend plus de place sur petits écrans */
-        padding: 15px; /* Réduit le padding pour maximiser l'espace */
+        width: 100%; 
+        padding: 15px; 
     }
 }
 
 @media (max-width: 480px) {
     .modal .modal-content {
-        width: 95%; /* Presque plein écran sur très petits écrans */
-        padding: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .modal .modal-content {
-        width: 95%; /* Presque plein écran sur très petits écrans */
+        width: 95%; 
         padding: 10px;
     }
 }
@@ -228,14 +178,4 @@ select {
         display: grid;
         grid-column: 1fr;
     }
-}
-
-/* Pour les écrans moyens (tablettes) */
-@media screen and (max-width: 768px) {
- 
-}
-
-/* Pour les grands écrans (ordinateurs) */
-@media screen and (min-width: 769px) {
-
 }

@@ -1,17 +1,25 @@
+/*Initiation des variables*/
+
 let cp = document.getElementById('codePostal');
 let select = document.getElementById('commune');
 let meteo = document.getElementById('meteoDisplay');
 let checkboxes = document.querySelectorAll('input[type="checkbox"]');
 let jourRange = document.getElementById('jourRange');
 let jourValue = document.getElementById('jourValue');
-let scalerContainer = document.getElementById('scalerContainer'); // Le scaler de 1 à 7 jours
+let scalerContainer = document.getElementById('scalerContainer'); 
 let imgmeteo = document.createElement('img');
+let communes = []; 
+let openModalBtn = document.getElementById('openModalBtn');
+let closeModalBtn = document.getElementById('closeModalBtn');
+let optionsModal = document.getElementById('optionsModal');
+
+/* affichage off */
 
 select.style.display = 'none';
 meteo.style.display = 'none';
-scalerContainer.style.display = 'none'; // Masquer le scaler par défaut
+scalerContainer.style.display = 'none'; 
 
-let communes = []; // Variable pour stocker les communes récupérées
+
 
 // Écouteur d'événement pour le champ de code postal
 cp.addEventListener('input', function() {
@@ -82,12 +90,17 @@ function rechercherCommune(codePostal) {
 
 // Affiche la valeur du scaler (nombre de jours) dynamiquement
 jourRange.addEventListener('input', function() {
+    
     jourValue.textContent = this.value;
     // Relance la fonction afficherMeteo avec la commune sélectionnée
+
     const selectedCommune = select.value;
+
     if (selectedCommune) {
         afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
     }
+  
+    //change l'affichage en fonction du nombre de jours
     if(jourValue.textContent == '1'){
         meteo.style.gridTemplateColumns='1fr'
     }
@@ -123,9 +136,11 @@ function afficherMeteo(insee, communes) {
 
                     if (forecast) {
 
-                        // Ajouter le pictogramme correspondant
+
+                      // Ajouter le pictogramme correspondant
                       let icone = forecast.weather;
-                      let imgSrc = ''; // Initialise imgSrc
+                      let imgSrc = ''; 
+                      
                       if (icone === 0) {
                           imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
                       } else if (icone >= 1 && icone <= 8) {
@@ -147,7 +162,7 @@ function afficherMeteo(insee, communes) {
                         const date = new Date(forecast.datetime); // Récupérer la date
                         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                         const formattedDate = date.toLocaleDateString('fr-FR', options);
-                        const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Met la première lettre en majuscule
+                        const capitalizedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); 
 
                         meteoInfo += `<strong>${capitalizedDate}</strong><br> 🌡 Température Min : ${forecast.tmin}°C<br> 🌡 Température Max : ${forecast.tmax}°C<br> ☔ Probabilité de Pluie : ${forecast.probarain}%<br> 🌅 Heures d'Ensoleillement : ${forecast.sun_hours}h<br>`;
 
@@ -178,7 +193,7 @@ function afficherMeteo(insee, communes) {
                   }
                   
                   meteoInfo += '</div>'
-                  return meteoInfo // Retourne les informations pour chaque jour
+                  return meteoInfo 
               })
                 .catch(error => {
                     console.error('Erreur:', error);
@@ -190,24 +205,17 @@ function afficherMeteo(insee, communes) {
     // Attendre que toutes les promesses soient résolues
     Promise.all(meteoPromises)
         .then(results => {
-            meteo.innerHTML = results.join('') // Affiche toutes les informations dans l'ordre
-            meteo.style.display = "grid"; // Affiche les informations météo
+            meteo.innerHTML = results.join('') 
+            meteo.style.display = "grid"; 
         });
 }
 
-
-
-// Get elements
-let openModalBtn = document.getElementById('openModalBtn');
-let closeModalBtn = document.getElementById('closeModalBtn');
-let optionsModal = document.getElementById('optionsModal');
-
-// Open modal when clicking the button
+// Faire apparaitre la fenêtre modale lorsqu'on appuie sur le bouton
 openModalBtn.addEventListener('click', function() {
     optionsModal.classList.add('active');
 });
 
-// Close modal when clicking the close button
+// Ferme la fenêtre modale si on clique sur le bouton fermer
 closeModalBtn.addEventListener('click', function() {
     optionsModal.classList.remove('active');
 
@@ -218,7 +226,7 @@ closeModalBtn.addEventListener('click', function() {
     }
 });
 
-// Optionally close the modal when clicking outside of the modal content
+// Ferme la fenêtre modale si on clique en dehors de la fenêtre
 window.addEventListener('click', function(event) {
     if (event.target === optionsModal) {
         optionsModal.classList.remove('active');
