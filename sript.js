@@ -92,7 +92,6 @@ function rechercherCommune(codePostal) {
 jourRange.addEventListener('input', function() {
     
     jourValue.textContent = this.value;
-
     // Relance la fonction afficherMeteo avec la commune sélectionnée
 
     const selectedCommune = select.value;
@@ -100,9 +99,8 @@ jourRange.addEventListener('input', function() {
     if (selectedCommune) {
         afficherMeteo(selectedCommune, communes); // Passe les communes récupérées
     }
-
+  
     //change l'affichage en fonction du nombre de jours
-
     if(jourValue.textContent == '1'){
         meteo.style.gridTemplateColumns='1fr'
     }
@@ -138,10 +136,11 @@ function afficherMeteo(insee, communes) {
 
                     if (forecast) {
 
+
                       // Ajouter le pictogramme correspondant
                       let icone = forecast.weather;
                       let imgSrc = ''; 
-
+                      
                       if (icone === 0) {
                           imgSrc = 'https://www.amcharts.com/wp-content/themes/amcharts4/css/img/icons/weather/animated/day.svg';
                       } else if (icone >= 1 && icone <= 8) {
